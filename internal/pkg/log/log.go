@@ -1,5 +1,7 @@
 package log
 
+import "context"
+
 var (
 	root Logger
 )
@@ -10,6 +12,35 @@ func Root() Logger {
 		root = newGlog()
 	}
 	return root
+}
+
+// NewContext return a new logger context
+func NewContext(ctx context.Context, logger Logger) context.Context {
+	if logger == nil {
+		logger = Root()
+	}
+	return context.WithValue(ctx, loggerKey, logger)
+}
+
+// FromContext get logger form context
+func FromContext(ctx context.Context) Logger {
+	if ctx == nil {
+		return Root()
+	}
+	if logger, ok := ctx.Value(loggerKey).(Logger); ok {
+		return logger
+	}
+	return Root()
+}
+
+// WithContext return a logger from the given context
+func WithContext(ctx context.Context) Logger {
+	return FromContext(ctx)
+}
+
+// WithFields return a new logger entry with fields
+func WithFields(fields Fields) Logger {
+	return Root().WithFields(fields)
 }
 
 // Info print info.

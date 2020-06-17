@@ -1,5 +1,9 @@
 package log
 
+import (
+	"github.com/sirupsen/logrus"
+)
+
 type (
 	Logger interface {
 		// Infof print info with format.
@@ -31,5 +35,15 @@ type (
 
 		// Panic panic.
 		Panic(v ...interface{})
+
+		WithFields(fields Fields) Logger
 	}
+
+	glog struct {
+		logger *logrus.Entry
+	}
+
+	Fields = map[string]interface{}
+
+	contextKey string
 )
