@@ -1,4 +1,4 @@
-package task
+package sprint
 
 import (
 	"encoding/json"
@@ -20,11 +20,9 @@ func NewHTTPHandler(srv Service) *Handler {
 func (h *Handler) FindAll(w http.ResponseWriter, r *http.Request) {
 	queries := r.URL.Query()
 	req := FindingRequestObject{
-		Offset:      handlerutil.IntFromQuery("offset", queries, 0),
-		Limit:       handlerutil.IntFromQuery("limit", queries, 15),
-		SprintID:    queries["sprint_id"],
-		CreatedByID: queries.Get("created_by_id"),
-		SortBy:      queries["sort_by"],
+		Offset: handlerutil.IntFromQuery("offset", queries, 0),
+		Limit:  handlerutil.IntFromQuery("limit", queries, 15),
+		SortBy: queries["sort_by"],
 	}
 	tasks, err := h.srv.repo.FindAll(r.Context(), req)
 	if err != nil {
@@ -49,7 +47,7 @@ func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Insert(w http.ResponseWriter, r *http.Request) {
-	var t Task
+	var t Sprint
 	if err := json.NewDecoder(r.Body).Decode(&t); err != nil {
 		log.WithContext(r.Context()).Infof("Failed to decode body, err: %v", err)
 		response.Error(w, err, http.StatusBadRequest)
@@ -81,7 +79,7 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
-	var t Task
+	var t Sprint
 	if err := json.NewDecoder(r.Body).Decode(&t); err != nil {
 		log.WithContext(r.Context()).Infof("Failed to decode body, err: %v", err)
 		response.Error(w, err, http.StatusBadRequest)

@@ -14,8 +14,18 @@ func NewRouter() (http.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
+	userHandler, err := newUserHandler()
+	if err != nil {
+		return nil, err
+	}
+	sprintHandler, err := newSprintHandler()
+	if err != nil {
+		return nil, err
+	}
 	routes := []router.Route{}
 	routes = append(routes, taskHandler.Routes()...)
+	routes = append(routes, userHandler.Routes()...)
+	routes = append(routes, sprintHandler.Routes()...)
 	//Routes
 	for _, rt := range routes {
 		var h http.Handler

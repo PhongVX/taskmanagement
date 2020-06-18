@@ -1,6 +1,7 @@
 package api
 
 import (
+	"os"
 	"sync"
 
 	"github.com/PhongVX/taskmanagement/internal/pkg/db/mongodb"
@@ -24,4 +25,12 @@ func dialDefaultMongoDB() (*mgo.Session, error) {
 	}
 	s := session.Clone()
 	return s, nil
+}
+
+func staticPath() string {
+	pth := os.Getenv("STATIC_PATH")
+	if pth != "" {
+		return pth
+	}
+	return "web/dist"
 }

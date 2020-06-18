@@ -1,4 +1,4 @@
-package task
+package user
 
 import (
 	"net/http"
@@ -9,27 +9,27 @@ import (
 func (h *Handler) Routes() []router.Route {
 	return []router.Route{
 		{
-			Path:    "/api/v1/tasks",
+			Path:    "/api/v1/users",
 			Method:  http.MethodGet,
 			Handler: h.FindAll,
 		},
 		{
-			Path:    "/api/v1/tasks",
+			Path:    "/api/v1/users",
 			Method:  http.MethodPost,
 			Handler: h.Insert,
 		},
 		{
-			Path:    "/api/v1/tasks",
+			Path:    "/api/v1/users",
 			Method:  http.MethodPut,
 			Handler: h.Update,
 		},
 		{
-			Path:    "/api/v1/tasks/{id}",
+			Path:    "/api/v1/users/{id}",
 			Method:  http.MethodGet,
 			Handler: h.FindByID,
 		},
 		{
-			Path:    "/api/v1/tasks/{id}",
+			Path:    "/api/v1/users/{id}",
 			Method:  http.MethodDelete,
 			Handler: h.Delete,
 		},
