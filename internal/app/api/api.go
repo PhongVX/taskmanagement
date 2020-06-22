@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 
+	"github.com/PhongVX/taskmanagement/internal/pkg/http/middleware"
 	"github.com/PhongVX/taskmanagement/internal/pkg/http/router"
 	"github.com/PhongVX/taskmanagement/internal/pkg/log"
+
 	"github.com/gorilla/mux"
 )
 
@@ -35,5 +37,5 @@ func NewRouter() (http.Handler, error) {
 	//Middleware
 	r.Use(log.NewHTTPContextHandler(log.Root()))
 
-	return r, nil
+	return middleware.CORS(r), nil
 }

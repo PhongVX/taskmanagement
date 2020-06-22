@@ -7,7 +7,9 @@ import (
 
 	"github.com/PhongVX/taskmanagement/internal/pkg/http/response"
 	"github.com/PhongVX/taskmanagement/internal/pkg/log"
+	"github.com/PhongVX/taskmanagement/internal/pkg/types/responsetype"
 	"github.com/PhongVX/taskmanagement/internal/pkg/utils/handlerutil"
+
 	"github.com/gorilla/mux"
 )
 
@@ -31,7 +33,9 @@ func (h *Handler) FindAll(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, tasks)
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: tasks,
+	})
 }
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {

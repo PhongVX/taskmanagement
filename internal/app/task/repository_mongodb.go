@@ -59,14 +59,14 @@ func (r *MongoDBRepository) FindByID(ctx context.Context, id string) (*Task, err
 }
 
 // Delete a task by task id
-func (r *MongoDBRepository) Delete(cxt context.Context, id string) error {
+func (r *MongoDBRepository) Delete(ctx context.Context, id string) error {
 	s := r.session.Clone()
 	defer s.Close()
 	return s.DB("").C(TASK_COLLECTION_NAME).RemoveId(bson.ObjectIdHex(id))
 }
 
 // Update a task
-func (r *MongoDBRepository) Update(cxt context.Context, t *Task) error {
+func (r *MongoDBRepository) Update(ctx context.Context, t *Task) error {
 	s := r.session.Clone()
 	defer s.Close()
 	t.UpdatedAt = timeutil.Now()

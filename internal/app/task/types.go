@@ -28,7 +28,7 @@ type (
 		Status          string        `json:"status" bson:"status" default:"TODO"`
 		CreatedAt       *time.Time    `json:"created_at" bson:"created_at,omitempty"`
 		UpdatedAt       *time.Time    `json:"updated_at" bson:"updated_at"`
-		SprintID        string        `json:"sprint_id" bson:"sprint_id"`
+		SprintID        string        `json:"sprint_id" bson:"sprint_id,omitempty"`
 		CreatedByID     string        `json:"created_by_id,omitempty" bson:"created_by_id"`
 		CreatedByName   string        `json:"created_by_name,omitempty" bson:"created_by_name"`
 		CreatedByAvatar string        `json:"created_by_avatar,omitempty" bson:"created_by_avatar"`

@@ -20,6 +20,9 @@ func (r *MongoDBRepository) FindAll(ctx context.Context, rO FindingRequestObject
 	sprints := make([]*Sprint, 0)
 	s := r.session.Clone()
 	defer s.Close()
+	if rO.CreatedByID != "" {
+		findingField["created_by_id"] = rO.CreatedByID
+	}
 	if err := s.DB("").C(SPRINT_COLLECTION_NAME).Find(findingField).Sort(rO.SortBy...).Skip(rO.Offset).Limit(rO.Limit).All(&sprints); err != nil {
 		return nil, err
 	}

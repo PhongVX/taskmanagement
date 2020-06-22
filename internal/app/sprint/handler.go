@@ -7,7 +7,9 @@ import (
 
 	"github.com/PhongVX/taskmanagement/internal/pkg/http/response"
 	"github.com/PhongVX/taskmanagement/internal/pkg/log"
+	"github.com/PhongVX/taskmanagement/internal/pkg/types/responsetype"
 	"github.com/PhongVX/taskmanagement/internal/pkg/utils/handlerutil"
+
 	"github.com/gorilla/mux"
 )
 
@@ -20,16 +22,19 @@ func NewHTTPHandler(srv Service) *Handler {
 func (h *Handler) FindAll(w http.ResponseWriter, r *http.Request) {
 	queries := r.URL.Query()
 	req := FindingRequestObject{
-		Offset: handlerutil.IntFromQuery("offset", queries, 0),
-		Limit:  handlerutil.IntFromQuery("limit", queries, 15),
-		SortBy: queries["sort_by"],
+		CreatedByID: queries.Get("created_by_id"),
+		Offset:      handlerutil.IntFromQuery("offset", queries, 0),
+		Limit:       handlerutil.IntFromQuery("limit", queries, 15),
+		SortBy:      queries["sort_by"],
 	}
-	tasks, err := h.srv.repo.FindAll(r.Context(), req)
+	sprints, err := h.srv.repo.FindAll(r.Context(), req)
 	if err != nil {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, tasks)
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: sprints,
+	})
 }
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +48,9 @@ func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, t)
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: t,
+	})
 }
 
 func (h *Handler) Insert(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +66,9 @@ func (h *Handler) Insert(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, t)
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: t,
+	})
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {

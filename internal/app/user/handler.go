@@ -7,7 +7,8 @@ import (
 
 	"github.com/PhongVX/taskmanagement/internal/pkg/http/response"
 	"github.com/PhongVX/taskmanagement/internal/pkg/log"
-	"github.com/PhongVX/taskmanagement/internal/pkg/utils/handlerutil"
+	"github.com/PhongVX/taskmanagement/internal/pkg/types/responsetype"
+
 	"github.com/gorilla/mux"
 )
 
@@ -18,18 +19,20 @@ func NewHTTPHandler(srv Service) *Handler {
 }
 
 func (h *Handler) FindAll(w http.ResponseWriter, r *http.Request) {
-	queries := r.URL.Query()
+	//queries := r.URL.Query()
 	req := FindingRequestObject{
-		Offset: handlerutil.IntFromQuery("offset", queries, 0),
-		Limit:  handlerutil.IntFromQuery("limit", queries, 15),
-		SortBy: queries["sort_by"],
+		// Offset: handlerutil.IntFromQuery("offset", queries, 0),
+		// Limit:  handlerutil.IntFromQuery("limit", queries, 15),
+		// SortBy: queries["sort_by"],
 	}
 	users, err := h.srv.repo.FindAll(r.Context(), req)
 	if err != nil {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, users)
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: users,
+	})
 }
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
@@ -38,12 +41,14 @@ func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, errors.New("invalid id"), http.StatusBadRequest)
 		return
 	}
-	t, err := h.srv.repo.FindByID(r.Context(), id)
+	u, err := h.srv.repo.FindByID(r.Context(), id)
 	if err != nil {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, t)
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: u,
+	})
 }
 
 func (h *Handler) Insert(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +64,9 @@ func (h *Handler) Insert(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, u)
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: u,
+	})
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -73,8 +80,8 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, map[string]string{
-		"id": id,
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		ID: id,
 	})
 }
 
@@ -91,7 +98,7 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, err, http.StatusInternalServerError)
 		return
 	}
-	response.JSON(w, http.StatusOK, map[string]string{
-		"id": u.ID.Hex(),
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		ID: u.ID.Hex(),
 	})
 }
