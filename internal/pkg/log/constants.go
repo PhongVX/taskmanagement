@@ -1,5 +1,6 @@
 package log
 
 const (
-	filePrefix = "file://"
+	loggerKey  contextKey = contextKey("logger_key")
+	filePrefix            = "file://"
 )

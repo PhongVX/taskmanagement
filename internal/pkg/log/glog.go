@@ -10,12 +10,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type (
-	glog struct {
-		logger *logrus.Entry
-	}
-)
-
 func newGlog() *glog {
 	return &glog{
 		logger: newLogrusEntry(),
@@ -70,6 +64,13 @@ func (g *glog) Errorf(format string, v ...interface{}) {
 // Panicf panic with format.
 func (g *glog) Panicf(format string, v ...interface{}) {
 	g.logger.Panicf(format, v...)
+}
+
+// WithFields return a new logger with fields
+func (g *glog) WithFields(fields Fields) Logger {
+	return &glog{
+		logger: g.logger.WithFields(logrus.Fields(fields)),
+	}
 }
 
 func newLogrusEntry() *logrus.Entry {
