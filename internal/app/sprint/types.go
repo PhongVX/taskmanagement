@@ -25,12 +25,12 @@ type (
 		ID              bson.ObjectId `json:"id" bson:"_id"`
 		Title           string        `json:"title" bson:"title,omitempty"`
 		Description     string        `json:"description" bson:"description,omitempty"`
-		Status          string        `json:"status" bson:"status" default:"TODO"`
+		Status          string        `json:"status" bson:"status,omitempty" default:"TODO"`
 		CreatedAt       *time.Time    `json:"created_at" bson:"created_at,omitempty"`
 		UpdatedAt       *time.Time    `json:"updated_at" bson:"updated_at"`
-		CreatedByID     string        `json:"created_by_id,omitempty" bson:"created_by_id"`
-		CreatedByName   string        `json:"created_by_name,omitempty" bson:"created_by_name"`
-		CreatedByAvatar string        `json:"created_by_avatar,omitempty" bson:"created_by_avatar"`
+		CreatedByID     string        `json:"created_by_id,omitempty" bson:"created_by_id,omitempty"`
+		CreatedByName   string        `json:"created_by_name,omitempty" bson:"created_by_name,omitempty"`
+		CreatedByAvatar string        `json:"created_by_avatar,omitempty" bson:"created_by_avatar,omitempty"`
 	}
 
 	Config struct {
