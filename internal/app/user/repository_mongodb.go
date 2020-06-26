@@ -36,28 +36,53 @@ func (r *MongoDBRepository) Insert(ctx context.Context, t *User) error {
 	return nil
 }
 
-// Find a user by user id
-func (r *MongoDBRepository) FindByID(ctx context.Context, id string) (*User, error) {
+//Identity: userName, email, _id
+func (r *MongoDBRepository) FindByIdentity(ctx context.Context, identity string) (*User, error) {
 	s := r.session.Clone()
 	defer s.Close()
-	var t User
-	if err := s.DB("").C(USER_COLLECTION_NAME).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&t); err != nil {
+	var u User
+	var findingField = []bson.M{
+		bson.M{"user_name": identity},
+		bson.M{"email": identity},
+	}
+	if bson.IsObjectIdHex(identity) {
+		findingField = append(findingField, bson.M{"_id": bson.ObjectIdHex(identity)})
+	}
+	if err := s.DB("").C(USER_COLLECTION_NAME).Find(bson.M{
+		"$or": findingField,
+	}).One(&u); err != nil {
 		return nil, err
 	}
-	return &t, nil
+	return &u, nil
 }
 
-// Delete a task by task id
-func (r *MongoDBRepository) Delete(cxt context.Context, id string) error {
+func (r *MongoDBRepository) FindByUserIdentity(ctx context.Context, u *User) (*User, error) {
+	s := r.session.Clone()
+	defer s.Close()
+	var user User
+	var findingField = []bson.M{
+		bson.M{"user_name": u.UserName},
+		bson.M{"email": u.Email},
+	}
+	if err := s.DB("").C(USER_COLLECTION_NAME).Find(bson.M{
+		"$or": findingField,
+	}).One(&user); err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+// Delete a user by user id
+func (r *MongoDBRepository) Delete(ctx context.Context, id string) error {
 	s := r.session.Clone()
 	defer s.Close()
 	return s.DB("").C(USER_COLLECTION_NAME).RemoveId(bson.ObjectIdHex(id))
 }
 
-// Update a task
-func (r *MongoDBRepository) Update(cxt context.Context, t *User) error {
+// Update a user
+func (r *MongoDBRepository) Update(ctx context.Context, u *User) error {
 	s := r.session.Clone()
 	defer s.Close()
-	err := s.DB("").C(USER_COLLECTION_NAME).Update(bson.M{"_id": t.ID}, bson.M{"$set": &t})
+	err := s.DB("").C(USER_COLLECTION_NAME).Update(bson.M{"_id": u.ID}, bson.M{"$set": &u})
 	return err
 }

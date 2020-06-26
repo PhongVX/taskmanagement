@@ -11,6 +11,6 @@ func newUserHandler() (*user.Handler, error) {
 	}
 	repo := user.NewMongoDBRepository(s)
 	srv := user.NewService(repo)
-	handler := user.NewHTTPHandler(*srv)
+	handler := user.NewHTTPHandler(srv)
 	return handler, nil
 }

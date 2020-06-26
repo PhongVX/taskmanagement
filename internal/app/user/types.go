@@ -9,12 +9,22 @@ import (
 
 //Interfaces
 type (
-	Repository interface {
-		Insert(ctx context.Context, t *User) error
-		FindByID(ctx context.Context, id string) (*User, error)
+	RepositoryInterface interface {
+		Insert(ctx context.Context, u *User) error
 		FindAll(ctx context.Context, r FindingRequestObject) ([]*User, error)
 		Delete(cxt context.Context, id string) error
-		Update(cxt context.Context, t *User) error
+		Update(cxt context.Context, u *User) error
+		FindByIdentity(ctx context.Context, identity string) (*User, error)
+		FindByUserIdentity(ctx context.Context, u *User) (*User, error)
+	}
+
+	ServiceInterface interface {
+		Insert(ctx context.Context, u *User) error
+		FindAll(ctx context.Context, r FindingRequestObject) ([]*User, error)
+		Delete(cxt context.Context, id string) error
+		Update(cxt context.Context, u *User) error
+		FindByIdentity(ctx context.Context, identity string) (*User, error)
+		FindByUserIdentity(ctx context.Context, u *User) (*User, error)
 	}
 )
 
@@ -26,6 +36,7 @@ type (
 		UserName  string        `json:"user_name" bson:"user_name,omitempty"`
 		FirstName string        `json:"first_name" bson:"first_name,omitempty"`
 		LastName  string        `json:"last_name" bson:"last_name,omitempty"`
+		Password  string        `json:"password" bson:"password,omitempty"`
 	}
 
 	Config struct {
@@ -39,13 +50,13 @@ type (
 	}
 
 	Handler struct {
-		srv Service
+		srv ServiceInterface
 		//Func Routes ==> handler_routes.go
 		//Func FindAll ==> handler.go
 	}
 
 	Service struct {
-		repo Repository
+		repo RepositoryInterface
 		conf Config
 	}
 

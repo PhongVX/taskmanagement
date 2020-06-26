@@ -12,6 +12,10 @@ import (
 
 func NewRouter() (http.Handler, error) {
 	r := mux.NewRouter()
+	authHandler, err := newAuthHandler()
+	if err != nil {
+		return nil, err
+	}
 	taskHandler, err := newTaskHandler()
 	if err != nil {
 		return nil, err
@@ -25,13 +29,18 @@ func NewRouter() (http.Handler, error) {
 		return nil, err
 	}
 	routes := []router.Route{}
+	routes = append(routes, authHandler.Routes()...)
 	routes = append(routes, taskHandler.Routes()...)
 	routes = append(routes, userHandler.Routes()...)
 	routes = append(routes, sprintHandler.Routes()...)
+
 	//Routes
 	for _, rt := range routes {
 		var h http.Handler
 		h = http.HandlerFunc(rt.Handler)
+		for i := len(rt.Middlewares) - 1; i >= 0; i-- {
+			h = rt.Middlewares[i](h)
+		}
 		r.Path(rt.Path).Methods(rt.Method).Handler(h)
 	}
 	//Middleware

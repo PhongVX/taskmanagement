@@ -26,7 +26,7 @@ func (h *Handler) Routes() []router.Route {
 		{
 			Path:    "/api/v1/users/{id}",
 			Method:  http.MethodGet,
-			Handler: h.FindByID,
+			Handler: h.FindByIdentity,
 		},
 		{
 			Path:    "/api/v1/users/{id}",
