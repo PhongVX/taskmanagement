@@ -13,5 +13,10 @@ func (h *Handler) Routes() []router.Route {
 			Method:  http.MethodPost,
 			Handler: h.Login,
 		},
+		{
+			Path:    "/api/v1/auth/refresh",
+			Method:  http.MethodPost,
+			Handler: h.Refresh,
+		},
 	}
 }

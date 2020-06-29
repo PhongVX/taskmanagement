@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/PhongVX/taskmanagement/internal/pkg/jwt"
@@ -16,8 +17,10 @@ func EnsureAuthenticated(next http.Handler) http.Handler {
 			w.Write([]byte("Malformed Token"))
 			return
 		}
+		//TODO Need to read from env file in future
+		os.Setenv("ACCESS_SECRET", "my-access-secret")
 		tokenString := authHeader[1]
-		claims, err := jwt.VerifyToken(tokenString)
+		claims, err := jwt.VerifyToken(tokenString, os.Getenv("ACCESS_SECRET"))
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Unauthorized"))
