@@ -16,6 +16,10 @@ func NewRouter() (http.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
+	oauthHandler, err := newOAuthHandler()
+	if err != nil {
+		return nil, err
+	}
 	taskHandler, err := newTaskHandler()
 	if err != nil {
 		return nil, err
@@ -28,7 +32,9 @@ func NewRouter() (http.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	routes := []router.Route{}
+	routes = append(routes, oauthHandler.Routes()...)
 	routes = append(routes, authHandler.Routes()...)
 	routes = append(routes, taskHandler.Routes()...)
 	routes = append(routes, userHandler.Routes()...)

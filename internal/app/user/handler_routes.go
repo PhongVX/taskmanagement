@@ -33,5 +33,10 @@ func (h *Handler) Routes() []router.Route {
 			Method:  http.MethodDelete,
 			Handler: h.Delete,
 		},
+		{
+			Path:    "/api/v1/users/who-am-i/{id}",
+			Method:  http.MethodGet,
+			Handler: h.WhoAmI,
+		},
 	}
 }

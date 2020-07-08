@@ -102,3 +102,22 @@ func (h *Handler) FindByIdentity(w http.ResponseWriter, r *http.Request) {
 		Result: u,
 	})
 }
+
+func (h *Handler) WhoAmI(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	if id == "" {
+		response.Error(w, errors.New("invalid id"), http.StatusBadRequest)
+		return
+	}
+	u, err := h.srv.FindByIdentity(r.Context(), id)
+	if err != nil {
+		response.Error(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	result := map[string]interface{}{"user_info": u, "permissions": nil}
+
+	response.JSON(w, http.StatusOK, responsetype.Base{
+		Result: result,
+	})
+}

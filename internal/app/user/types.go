@@ -31,12 +31,15 @@ type (
 //Data Struct
 type (
 	User struct {
-		ID        bson.ObjectId `json:"id" bson:"_id"`
-		Email     string        `json:"email" bson:"email,omitempty"`
-		UserName  string        `json:"user_name" bson:"user_name,omitempty"`
-		FirstName string        `json:"first_name" bson:"first_name,omitempty"`
-		LastName  string        `json:"last_name" bson:"last_name,omitempty"`
-		Password  string        `json:"password" bson:"password,omitempty"`
+		ID                bson.ObjectId `json:"id" bson:"_id"`
+		Email             string        `json:"email" bson:"email,omitempty"`
+		UserName          string        `json:"user_name" bson:"user_name,omitempty"`
+		FirstName         string        `json:"first_name" bson:"first_name,omitempty"`
+		LastName          string        `json:"last_name" bson:"last_name,omitempty"`
+		Password          string        `json:"password" bson:"password,omitempty"`
+		VerifiedEmail     bool          `json:"verified_email,omitempty" bson:"verified_email,omitempty"`
+		IsOauthFirstLogin bool          `json:"is_oauth_first_login,omitempty" bson:"is_oauth_first_login,omitempty"`
+		Picture           string        `json:"picture,omitempty" bson:"picture,omitempty"`
 	}
 
 	Config struct {
